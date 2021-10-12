@@ -18,22 +18,16 @@ bool is_dir(const char* path) {
   }
 }
 
-/* 
- * I needed this because the multiple recursion means there's no way to
- * order them so that the definitions all precede the cause.
- */
 void process_path(const char*);
 
 void process_directory(const char* path) {
-  chdir(path);
-  struct dirent *entry;
   DIR *dir;
   dir = opendir(path);
+  chdir(path);
+  struct dirent *entry;
   while((entry = readdir(dir)) != NULL){
     if(strcmp(".",entry->d_name) != 0 && strcmp("..",entry->d_name) != 0){
-      char pathTo[1024];
-      snprintf(pathTo, sizeof(pathTo), "%s/%s", path, entry->d_name);
-      process_path(pathTo);
+      process_path(entry->d_name);
     }
   }
   closedir(dir);
@@ -41,10 +35,6 @@ void process_directory(const char* path) {
 }
 
 void process_file(const char* path) {
-  /*
-   * Update the number of regular files.
-   * This is as simple as it seems. :-)
-   */
   num_regular++;
 }
 

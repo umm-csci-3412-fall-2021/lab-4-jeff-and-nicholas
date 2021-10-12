@@ -22,14 +22,20 @@ void process_path(const char*);
 
 void process_directory(const char* path) {
   DIR *dir;
+  //Open directory using opendir and move into it with chdir
   dir = opendir(path);
   chdir(path);
   struct dirent *entry;
+  //Using readdir to loop through each file in active directory until it runs out
+  //at which point it returns NULL
   while((entry = readdir(dir)) != NULL){
+    //if statement to filter out files "." and ".."
     if(strcmp(".",entry->d_name) != 0 && strcmp("..",entry->d_name) != 0){
+      //"Recursive call to process path to increment the correct counter."
       process_path(entry->d_name);
     }
   }
+  //Close directory and move out using closedir and chdir("..")
   closedir(dir);
   chdir("..");
 }

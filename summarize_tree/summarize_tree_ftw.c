@@ -9,6 +9,9 @@
 
 static int num_dirs, num_regular;
 
+//ftw calling callback on each file it reads, we then use the typeflag to
+//increment the correct counter for the file/directory we found
+//typeflag == 0 for regular files, and typeflag > 0 for directories
 static int callback(const char *fpath, const struct stat *sb, int typeflag) {
     if(typeflag == 0){
         num_regular++;
@@ -22,7 +25,6 @@ static int callback(const char *fpath, const struct stat *sb, int typeflag) {
 #define MAX_FTW_DEPTH 16
 
 int main(int argc, char** argv) {
-    // Check arguments and set things up
 
     num_dirs = 0;
     num_regular = 0;
